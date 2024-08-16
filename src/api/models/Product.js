@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { v4: uuidv4 } = require('uuid')
 const sizeSchema = new mongoose.Schema({
     name:  String,
-    quantity: String
+    quantity: Number
 })
 const productSchema = new mongoose.Schema({
     title: {
@@ -55,7 +55,13 @@ const productSchema = new mongoose.Schema({
         {
             type: [sizeSchema]
         }
-    ]
+    ],
+    created_at: {
+        type: Number,
+        default: function () {
+          return new Date().getTime(); /* timestamp in miliseconds */
+        }
+    }
 })
 
 module.exports = {

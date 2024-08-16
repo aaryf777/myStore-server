@@ -23,6 +23,23 @@ exports.create = async(req,res,next) => {
         throwError(res,error)
     }
 }
+exports.edit = async(req,res,next) => {
+    try {
+        const {productID, ...data} = req.body;
+        if(!productID) {
+            throw new Error('Invalid Payload')
+        }
+        const product = await productModel.findOneAndUpdate({productID},{$set: data});
+        res.status(201).json({
+            status: 'success',
+            message: 'updated user successfully',
+            data: product
+        })
+    } catch (error) {
+        console.log('error - ',error)
+        throwError(res,error)
+    }
+}
 exports.getProducts = async (req, res, next) => {
     try {
         const products = await productModel.find({},{category:1,title:1,price:1,productID:1,ImgUrls:1,status:1,quantity:1})
@@ -45,6 +62,20 @@ exports.getProductById = async (req, res, next) => {
         res.status(200).json({
             status: 'success',
             data: product
+        })
+    } catch (error) {
+        throwError(res,error)
+    }
+}
+
+exports.searchFilter = async (req, res, next) => {
+    try {
+        const {search} = req.params;
+        if(!search) throw new Error('Missing search query')
+        const productList = await productModel.find({ $or: [{productID: {$regex : search}}, {title: {$regex : search}}, {description: {$regex : search}}]})
+        res.status(200).json({
+            status: 'success',
+            data: productList
         })
     } catch (error) {
         throwError(res,error)
