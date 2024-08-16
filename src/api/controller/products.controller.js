@@ -42,7 +42,7 @@ exports.edit = async(req,res,next) => {
 }
 exports.getProducts = async (req, res, next) => {
     try {
-        const products = await productModel.find({},{category:1,title:1,price:1,productID:1,ImgUrls:1,status:1,quantity:1})
+        const products = await productModel.find({},{category:1,title:1,price:1,productID:1,ImgUrls:1,status:1,quantity:1,collection:1,created_at:1})
         console.log('products - ',products);
         
         res.status(200).json({
